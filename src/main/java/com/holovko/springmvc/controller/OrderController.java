@@ -2,14 +2,14 @@ package com.holovko.springmvc.controller;
 
 import com.holovko.springmvc.model.Order;
 import com.holovko.springmvc.service.OrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@Tag(name = "order", description = "the Order API")
 public class OrderController {
     @Autowired
     OrderService orderService;

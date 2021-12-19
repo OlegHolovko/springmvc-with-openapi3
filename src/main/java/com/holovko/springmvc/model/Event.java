@@ -1,9 +1,9 @@
 package com.holovko.springmvc.model;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,13 +13,11 @@ import java.util.Set;
 @Table(name = "events")
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 
-public class Event {
+public class Event extends BaseEntity{
+
     @Id
-    @SequenceGenerator(name="pk_sequence",sequenceName="event_id_seq", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="pk_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
 
@@ -33,15 +31,11 @@ public class Event {
     private Integer price;
 
     @Column(name="start_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
-
-    @Column(name="created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name="updated_at")
-    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Order> orders;
+
 }

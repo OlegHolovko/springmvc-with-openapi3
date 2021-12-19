@@ -12,26 +12,24 @@ public class EventService {
     @Autowired
     EventRepository eventRepository;
 
-    // CREATE
     public Event createEvent(Event event) {
         return eventRepository.save(event);
     }
 
-    // READ
     public List<Event> getEvents() {
         return (List<Event>) eventRepository.findAll();
     }
 
-    // DELETE
     public void deleteEvent(Long eventId) {
         eventRepository.deleteById(eventId);
     }
 
-    // UPDATE
     public Event updateEvent(Long eventId, Event eventDetails) {
         Event event = eventRepository.findById(eventId).get();
         event.setName(eventDetails.getName());
-
+        event.setAmount(eventDetails.getAmount());
+        event.setPrice(eventDetails.getPrice());
+        event.setStartDate(eventDetails.getStartDate());
         return eventRepository.save(event);
     }
 }

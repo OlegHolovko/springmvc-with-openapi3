@@ -12,13 +12,12 @@ import java.time.LocalDateTime;
 @Table(name = "orders")
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 
 public class Order {
     @Id
-    @SequenceGenerator(name="pk_sequence",sequenceName="order_id_seq", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="pk_sequence")
+    //@SequenceGenerator(name="order_sequence",sequenceName="order_id_seq", allocationSize=1)
+    //@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="order_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
 
