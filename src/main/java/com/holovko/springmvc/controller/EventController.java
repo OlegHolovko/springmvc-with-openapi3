@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("events")
 @Tag(name = "event", description = "the Event API")
+
 public class EventController {
     @Autowired
     EventService eventService;
