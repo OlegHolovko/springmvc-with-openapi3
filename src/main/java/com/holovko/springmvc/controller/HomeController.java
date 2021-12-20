@@ -7,9 +7,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/")
 public class HomeController {
-    @RequestMapping(value = "")
+    @RequestMapping(value = "/")
     public ModelAndView index() {
         return new ModelAndView("redirect:swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config");
     }

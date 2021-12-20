@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("events")
+@RequestMapping("/events")
 @Tag(name = "event", description = "the Event API")
 
 public class EventController {
@@ -21,9 +22,14 @@ public class EventController {
         return eventService.createEvent(event);
     }
 
-    @GetMapping(value = "/", produces = "application/json")
+    @RequestMapping(value = "/", method= RequestMethod.GET, produces = "application/json")
     public List<Event> readEvents() {
         return eventService.getEvents();
+    }
+
+    @RequestMapping(value = "/{Id}", method= RequestMethod.GET, produces = "application/json")
+    public Optional<Event> getEvent(@PathVariable(value = "Id") Long id) {
+        return eventService.getEvent(id);
     }
 
     @RequestMapping(value="/{Id}", method=RequestMethod.PUT, produces = "application/json")
@@ -35,4 +41,5 @@ public class EventController {
     public void deleteEvent(@PathVariable(value = "Id") Long id) {
         eventService.deleteEvent(id);
     }
+
 }

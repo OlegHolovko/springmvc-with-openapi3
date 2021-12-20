@@ -1,5 +1,9 @@
 DELETE FROM orders;
 DELETE FROM events;
+
+alter sequence events_id_seq restart;
+alter sequence orders_id_seq restart;
+
 INSERT INTO events (name, amount, price, start_date, created_at) VALUES ('Football', 100, 1257, '2022-01-13', '2021-12-14');
 INSERT INTO events (name, amount, price, start_date, created_at) VALUES ('Concert', 20, 56, '2021-12-31', '2021-12-14');
 INSERT INTO events (name, amount, price, start_date, created_at) VALUES ('Opera', 70, 2000, '2022-05-01', '2021-12-14');

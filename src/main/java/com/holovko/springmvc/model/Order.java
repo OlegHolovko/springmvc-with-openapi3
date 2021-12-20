@@ -1,5 +1,6 @@
 package com.holovko.springmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,6 @@ import java.time.LocalDateTime;
 
 public class Order {
     @Id
-    //@SequenceGenerator(name="order_sequence",sequenceName="order_id_seq", allocationSize=1)
-    //@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="order_sequence")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
@@ -38,5 +37,6 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "event_id", nullable = false)
+    @JsonBackReference
     private Event event;
 }

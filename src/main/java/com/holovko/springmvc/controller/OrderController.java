@@ -13,7 +13,7 @@ import java.util.List;
 public class OrderController {
     @Autowired
     OrderService orderService;
-
+/*
     @RequestMapping(value="/order", method= RequestMethod.POST)
     public Order createOrder(@RequestBody Order order) {
         return orderService.createOrder(order);
@@ -33,4 +33,6 @@ public class OrderController {
     public void deleteOrder(@PathVariable(value = "orderId") Long id) {
         orderService.deleteOrder(id);
     }
+
+ */
 }
