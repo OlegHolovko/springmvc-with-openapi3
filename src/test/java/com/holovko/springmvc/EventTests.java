@@ -1,7 +1,7 @@
 package com.holovko.springmvc;
 
 import com.holovko.springmvc.controller.EventController;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,16 +20,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource("/application-test.properties")
 @Sql(value = "/import-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = "/clean-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@WebMvcTest(EventController.class)
-public class EventTests{
+class EventTests {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void getList() throws Exception {
-        //this.mockMvc.perform(get("/events")).andExpect(status().isOk());
-        this.mockMvc.perform(get("/"))
-                .andExpect(redirectedUrl("swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config"));
-        //this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk());
+    void getEventsList() throws Exception {
+        this.mockMvc.perform(get("/events"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/hal+json"))
+            .andExpect(jsonPath("$[*]", hasSize(2)))
+            .andExpect(jsonPath("$._embedded.events[0].name", is("Football")))
+            .andExpect(jsonPath("$._embedded.events[0].amount", is(100)))
+            .andExpect(jsonPath("$._embedded.events[0].price", is(1257)))
+            .andExpect(jsonPath("$._embedded.events[0].startDate", is("2022-01-13 00:00:00")))
+            .andExpect(jsonPath("$._embedded.events[2].name", is("Opera")))
+            .andExpect(jsonPath("$._embedded.events[2].amount", is(70)))
+            .andExpect(jsonPath("$._embedded.events[2].price", is(2000)))
+            .andExpect(jsonPath("$._embedded.events[2].startDate", is("2022-05-01 00:00:00")));
+
     }
 }
+
