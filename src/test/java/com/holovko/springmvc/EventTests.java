@@ -38,7 +38,14 @@ class EventTests {
             .andExpect(jsonPath("$._embedded.events[2].amount", is(70)))
             .andExpect(jsonPath("$._embedded.events[2].price", is(2000)))
             .andExpect(jsonPath("$._embedded.events[2].startDate", is("2022-05-01 00:00:00")));
+    }
 
+    @Test
+    void getEvent() throws Exception {
+        this.mockMvc.perform(get("/events/3"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.id", is(3)));
     }
 }
 
