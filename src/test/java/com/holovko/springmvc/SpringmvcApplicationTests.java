@@ -22,6 +22,6 @@ class SpringmvcApplicationTests {
     @Test
     void defaultPageRedirectToSwagger() throws Exception {
         this.mockMvc.perform(get("/"))
-                .andExpect(redirectedUrl("swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config"));
+                .andExpect(redirectedUrl("swagger-ui/index.html?configUrl=/api-docs/swagger-config"));
     }
 }
