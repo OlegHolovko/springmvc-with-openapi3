@@ -24,18 +24,18 @@ public class EventController {
         return eventService.getEvents();
     }
 
-    @GetMapping(value = "/{Id}", produces = "application/json")
-    public Event getEvent(@PathVariable(value = "Id") Long id) {
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public Event getEvent(@PathVariable(value = "id") Long id) {
         return eventService.getEvent(id);
     }
 
-    @PutMapping(value="/{Id}", produces = "application/json")
-    public Event readEvent(@PathVariable(value = "Id") Long id, @RequestBody Event eventDetails) {
+    @PutMapping(value="/{id}", produces = "application/json")
+    public Event readEvent(@PathVariable(value = "id") Long id, @RequestBody Event eventDetails) {
         return eventService.updateEvent(id, eventDetails);
     }
 
-    @DeleteMapping(value="/{Id}", produces = "application/json")
-    public void deleteEvent(@PathVariable(value = "Id") Long id) {
+    @DeleteMapping(value="/{id}", produces = "application/json")
+    public void deleteEvent(@PathVariable(value = "id") Long id) {
         eventService.deleteEvent(id);
     }
 

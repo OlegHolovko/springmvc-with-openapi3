@@ -1,13 +1,11 @@
 package com.holovko.springmvc.controller;
 
-import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.model.Order;
 import com.holovko.springmvc.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
@@ -25,18 +23,18 @@ public class OrderController {
         return orderService.getOrders();
     }
 
-    @GetMapping(value = "/{Id}", produces = "application/json")
-    public Order getOrder(@PathVariable(value = "Id") Long id) {
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public Order getOrder(@PathVariable(value = "id") Long id) {
         return orderService.getOrder(id);
     }
 
-    @PutMapping(value="/{orderId}", produces = "application/json")
-    public Order readOrders(@PathVariable(value = "orderId") Long id, @RequestBody Order orderDetails) {
+    @PutMapping(value="/{id}", produces = "application/json")
+    public Order readOrders(@PathVariable(value = "id") Long id, @RequestBody Order orderDetails) {
         return orderService.updateOrder(id, orderDetails);
     }
 
-    @DeleteMapping(value="/{orderId}", produces = "application/json")
-    public void deleteOrder(@PathVariable(value = "orderId") Long id) {
+    @DeleteMapping(value="/{id}", produces = "application/json")
+    public void deleteOrder(@PathVariable(value = "id") Long id) {
         orderService.deleteOrder(id);
     }
 
