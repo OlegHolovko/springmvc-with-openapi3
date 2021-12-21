@@ -1,38 +1,43 @@
 package com.holovko.springmvc.controller;
 
+import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.model.Order;
 import com.holovko.springmvc.service.OrderService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@Tag(name = "order", description = "the Order API")
+@RequestMapping("/orders")
 public class OrderController {
     @Autowired
     OrderService orderService;
-/*
-    @RequestMapping(value="/order", method= RequestMethod.POST)
+
+    @PostMapping(value="/", produces = "application/json")
     public Order createOrder(@RequestBody Order order) {
         return orderService.createOrder(order);
     }
 
-    @RequestMapping(value="/orders", method=RequestMethod.GET)
+    @GetMapping(value="/", produces = "application/json")
     public List<Order> readOrders() {
         return orderService.getOrders();
     }
 
-    @RequestMapping(value="/orders/{orderId}", method=RequestMethod.PUT)
+    @GetMapping(value = "/{Id}", produces = "application/json")
+    public Order getOrder(@PathVariable(value = "Id") Long id) {
+        return orderService.getOrder(id);
+    }
+
+    @PutMapping(value="/{orderId}", produces = "application/json")
     public Order readOrders(@PathVariable(value = "orderId") Long id, @RequestBody Order orderDetails) {
         return orderService.updateOrder(id, orderDetails);
     }
 
-    @RequestMapping(value="/order/{orderId}", method=RequestMethod.DELETE)
+    @DeleteMapping(value="/{orderId}", produces = "application/json")
     public void deleteOrder(@PathVariable(value = "orderId") Long id) {
         orderService.deleteOrder(id);
     }
 
- */
 }

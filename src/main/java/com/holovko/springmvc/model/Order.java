@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -34,6 +35,9 @@ public class Order {
 
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name="event_id",  insertable = false, updatable = false )
+    public Integer eventId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "event_id", nullable = false)

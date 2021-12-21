@@ -1,10 +1,10 @@
 package com.holovko.springmvc.service;
 
+import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.model.Order;
 import com.holovko.springmvc.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -12,26 +12,33 @@ public class OrderService {
     @Autowired
     OrderRepository orderRepository;
 
-    // CREATE
     public Order createOrder(Order order) {
+
         return orderRepository.save(order);
     }
 
-    // READ
     public List<Order> getOrders() {
         return (List<Order>) orderRepository.findAll();
     }
 
-    // DELETE
-    public void deleteOrder(Long empId) {
-        orderRepository.deleteById(empId);
+    public Order getOrder(Long orderId) {
+        return orderRepository.findById(orderId).get();
     }
 
-    // UPDATE
-    public Order updateOrder(Long empId, Order orderDetails) {
-        Order emp = orderRepository.findById(empId).get();
-        emp.setBuyerName(orderDetails.getBuyerName());
+    public void deleteOrder(Long orderId) {
+        orderRepository.deleteById(orderId);
+    }
 
-        return orderRepository.save(emp);
+    public Order updateOrder(Long orderId, Order orderDetails) {
+        Order order = orderRepository.findById(orderId).get();
+        order.setBuyerName(orderDetails.getBuyerName());
+        order.setAmount(orderDetails.getAmount());
+        order.setTotalPrice(orderDetails.getTotalPrice());
+        if(orderDetails.getEventId()!= null) {
+            EventService eventService = new EventService();
+            Event event = eventService.getEvent(Long.valueOf(orderDetails.getEventId()));
+            order.setEvent(event);
+        }
+        return orderRepository.save(order);
     }
 }
