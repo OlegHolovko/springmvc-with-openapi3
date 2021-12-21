@@ -18,6 +18,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -53,7 +54,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.1</version>
+            <version>1.5.2</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -69,8 +70,7 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
-            <version>2.2</version>
-            <scope>test</scope>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 

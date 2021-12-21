@@ -4,9 +4,7 @@ import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventService {
@@ -21,8 +19,8 @@ public class EventService {
         return (List<Event>) eventRepository.findAll();
     }
 
-    public Optional<Event> getEvent(Long eventId) {
-        return eventRepository.findById(eventId);
+    public Event getEvent(Long eventId) {
+        return eventRepository.findById(eventId).get();
     }
 
     public void deleteEvent(Long eventId) {
