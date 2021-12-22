@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 
-public class Order {
+public class Order extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +36,13 @@ public class Order {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
+    /*
     @Column(name="event_id",  insertable = false, updatable = false )
     public Integer eventId;
+     */
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "event_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "event_id", nullable = true)
     @JsonBackReference
     private Event event;
 }
