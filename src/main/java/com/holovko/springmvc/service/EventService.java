@@ -4,6 +4,8 @@ import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
+
 import java.util.List;
 
 @Service
@@ -20,6 +22,9 @@ public class EventService {
     }
 
     public Event getEvent(Long eventId) {
+        if (eventRepository.findById(eventId).isEmpty()) {
+            throw new NotFoundException("Event not found!");
+        }
         return eventRepository.findById(eventId).get();
     }
 

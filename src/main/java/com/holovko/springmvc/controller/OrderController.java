@@ -1,6 +1,5 @@
 package com.holovko.springmvc.controller;
 
-import com.holovko.springmvc.dto.OrderDTO;
 import com.holovko.springmvc.model.Order;
 import com.holovko.springmvc.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,8 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping(value="/", produces = "application/json")
-    public Order createOrder(@RequestBody OrderDTO orderDTO) {
-        System.out.println("CreateOrderRoute");
-        return orderService.createOrder(orderDTO);
+    public Order createOrder(@RequestBody Order order) {
+        return orderService.createOrder(order);
     }
 
     @GetMapping(value="/", produces = "application/json")
@@ -31,8 +29,8 @@ public class OrderController {
     }
 
     @PutMapping(value="/{id}", produces = "application/json")
-    public Order readOrders(@PathVariable(value = "id") Long id, @RequestBody OrderDTO orderDTO) {
-        return orderService.updateOrder(id, orderDTO);
+    public Order readOrders(@PathVariable(value = "id") Long id, @RequestBody Order order) {
+        return orderService.updateOrder(id, order);
     }
 
     @DeleteMapping(value="/{id}", produces = "application/json")

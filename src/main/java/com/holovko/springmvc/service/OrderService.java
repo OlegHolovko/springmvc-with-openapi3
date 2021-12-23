@@ -1,7 +1,5 @@
 package com.holovko.springmvc.service;
 
-import com.holovko.springmvc.dto.OrderDTO;
-import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.model.Order;
 import com.holovko.springmvc.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +11,10 @@ public class OrderService {
     @Autowired
     OrderRepository orderRepository;
 
-    public Order createOrder(OrderDTO orderDTO) {
-        Order order = orderDTO.getOrder();
-        //order.setBuyerName(orderDTO.getBuyerName());
-        //order.setAmount(orderDTO.getAmount());
-        //order.setTotalPrice(orderDTO.getTotalPrice());
-        //order.setEvent(orderDTO.getOrder().getEvent());
+    public Order createOrder(Order order) {
+        if(order.getEventId()!= null) {
+            order.setEvent(orderRepository.findEventByIdNativeQuery(order.getEventId()));
+        }
         return orderRepository.save(order);
     }
 
@@ -34,12 +30,14 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    public Order updateOrder(Long orderId, OrderDTO orderDTO) {
+    public Order updateOrder(Long orderId, Order orderDetails) {
         Order order = orderRepository.findById(orderId).get();
-        order.setBuyerName(orderDTO.getBuyerName());
-        order.setAmount(orderDTO.getAmount());
-        order.setTotalPrice(orderDTO.getTotalPrice());
-        order.setEvent(orderDTO.getOrder().getEvent());
+        order.setBuyerName(orderDetails.getBuyerName());
+        order.setAmount(orderDetails.getAmount());
+        order.setTotalPrice(orderDetails.getTotalPrice());
+        if(orderDetails.getEventId()!= null) {
+            order.setEvent(orderRepository.findEventByIdNativeQuery(orderDetails.getEventId()));
+        }
         return orderRepository.save(order);
     }
 }

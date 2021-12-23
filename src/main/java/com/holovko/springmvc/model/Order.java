@@ -1,11 +1,8 @@
 package com.holovko.springmvc.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -36,13 +33,14 @@ public class Order extends BaseEntity{
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    /*
-    @Column(name="event_id",  insertable = false, updatable = false )
-    public Integer eventId;
-     */
-
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "event_id", nullable = true)
     @JsonBackReference
     private Event event;
+
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(name="event_id")
+    private Long eventId;
+
 }
