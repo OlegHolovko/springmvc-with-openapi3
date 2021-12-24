@@ -1,11 +1,15 @@
 package com.holovko.springmvc.service;
 
+import com.holovko.springmvc.dto.EventDTO;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +23,18 @@ public class EventService {
 
     public List<Event> getEvents() {
         return (List<Event>) eventRepository.findAll();
+    }
+
+    public List<EventDTO> getEventsByStartDate() {
+        ArrayList<Event> list = (ArrayList<Event>) eventRepository.findAllByOrderByStartDateAsc();
+        ArrayList<EventDTO> listDTO = new ArrayList<>();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        int i = 0;
+        for( Event event : list){
+            EventDTO eventDTO = new EventDTO(++i, event.getName(), event.getStartDate().format(dateTimeFormatter) );
+            listDTO.add(eventDTO);
+        }
+        return listDTO;
     }
 
     public Event getEvent(Long eventId) {
