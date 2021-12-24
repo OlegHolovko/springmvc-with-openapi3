@@ -5,22 +5,27 @@ import com.holovko.springmvc.exception.EventNotFoundException;
 import com.holovko.springmvc.exception.TiсketsSoldOutException;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.model.Order;
+import com.holovko.springmvc.repository.EventRepository;
 import com.holovko.springmvc.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class OrderService {
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    EventRepository eventRepository;
 
     public Order createOrder(Long eventId, Order order)
             throws EventNotFoundException, EventExpiredException, TiсketsSoldOutException {
         if(!orderRepository.existsById(eventId))
             throw new EventNotFoundException();
-        Event event = orderRepository.findEventById(eventId);
-        if(orderRepository.getNotExpiredEventById(eventId) != eventId)
+        Event event = eventRepository.findEventById(eventId);
+        if(eventRepository.getNotExpiredEventById(eventId, LocalDateTime.now()) != eventId)
             throw new EventExpiredException();
         if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - order.getAmount() < 0)
             throw new TiсketsSoldOutException();
@@ -48,8 +53,8 @@ public class OrderService {
         order.setAmount(orderDetails.getAmount());
         if(!orderRepository.existsById(eventId))
             throw new EventNotFoundException();
-        Event event = orderRepository.findEventById(eventId);
-        if(orderRepository.getNotExpiredEventById(eventId) != eventId)
+        Event event = eventRepository.findEventById(eventId);
+        if(eventRepository.getNotExpiredEventById(eventId, LocalDateTime.now()) != eventId)
             throw new EventExpiredException();
         if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - order.getAmount() < 0)
             throw new TiсketsSoldOutException();
