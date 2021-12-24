@@ -18,7 +18,7 @@ public class EventController {
         return eventService.createEvent(event);
     }
 
-    @PostMapping(value = "/events/buyer", produces = "application/json")
+    @GetMapping(value = "/events/buyer/{buyerName}", produces = "application/json")
     public BuyerDTO getEventsByBuyer(@PathVariable(value = "buyerName") String buyerName) {
         return eventService.getEventsByBuyer(buyerName);
     }
