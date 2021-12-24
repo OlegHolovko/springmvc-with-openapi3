@@ -2,6 +2,7 @@ package com.holovko.springmvc.service;
 
 import com.holovko.springmvc.dto.BuyerDTO;
 import com.holovko.springmvc.dto.EventDTO;
+import com.holovko.springmvc.dto.EventForBuyerDTO;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,14 @@ public class EventService {
     }
 
     public BuyerDTO getEventsByBuyer(String buyerName) {
-
+        ArrayList<String> list = (ArrayList<String>) eventRepository.findEventsByBuyer(buyerName);
+        ArrayList<EventForBuyerDTO> listEvents = new ArrayList<>();
+        int i = 0;
+        for( String eventName : list){
+            EventForBuyerDTO eventForBuyerDTO = new EventForBuyerDTO(++i, eventName);
+            listEvents.add(eventForBuyerDTO);
+        }
+        BuyerDTO buyerDTO = new BuyerDTO(buyerName, listEvents);
         return null;
     }
 }
