@@ -1,5 +1,6 @@
 package com.holovko.springmvc.controller;
 
+import com.holovko.springmvc.dto.BuyerDTO;
 import com.holovko.springmvc.dto.EventDTO;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.service.EventService;
@@ -15,6 +16,11 @@ public class EventController {
     @PostMapping(value = "/events", produces = "application/json")
     public Event createEvent(@RequestBody Event event) {
         return eventService.createEvent(event);
+    }
+
+    @PostMapping(value = "/events/buyer", produces = "application/json")
+    public BuyerDTO getEventsByBuyer(@PathVariable(value = "buyerName") String buyerName) {
+        return eventService.getEventsByBuyer(buyerName);
     }
 
     @GetMapping(value = "/events", produces = "application/json")

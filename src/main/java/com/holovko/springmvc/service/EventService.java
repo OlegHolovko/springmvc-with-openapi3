@@ -1,5 +1,6 @@
 package com.holovko.springmvc.service;
 
+import com.holovko.springmvc.dto.BuyerDTO;
 import com.holovko.springmvc.dto.EventDTO;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.repository.EventRepository;
@@ -55,5 +56,10 @@ public class EventService {
         event.setPrice(eventDetails.getPrice());
         event.setStartDate(eventDetails.getStartDate());
         return eventRepository.save(event);
+    }
+
+    public BuyerDTO getEventsByBuyer(String buyerName) {
+
+        return null;
     }
 }
