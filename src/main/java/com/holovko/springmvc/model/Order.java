@@ -38,9 +38,4 @@ public class Order extends BaseEntity{
     @JsonBackReference
     private Event event;
 
-    @Transient
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Column(name="event_id")
-    private Long eventId;
-
 }
