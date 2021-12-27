@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class BuyerDTO {
+public class EventCustomDTO {
+    private Integer num;
     private String name;
-    private List<EventForBuyerDTO> events;
+    private String startDate;
 }

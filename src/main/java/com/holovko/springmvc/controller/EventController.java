@@ -1,7 +1,7 @@
 package com.holovko.springmvc.controller;
 
-import com.holovko.springmvc.dto.BuyerDTO;
-import com.holovko.springmvc.dto.EventDTO;
+import com.holovko.springmvc.dto.BuyerCustomDTO;
+import com.holovko.springmvc.dto.EventCustomDTO;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class EventController {
     }
 
     @GetMapping(value = "/events/buyer/{buyerName}", produces = "application/json")
-    public BuyerDTO getEventsByBuyer(@PathVariable(value = "buyerName") String buyerName) {
+    public BuyerCustomDTO getEventsByBuyer(@PathVariable(value = "buyerName") String buyerName) {
         return eventService.getEventsByBuyer(buyerName);
     }
 
@@ -30,7 +30,7 @@ public class EventController {
     }
 
     @GetMapping(value = "/events/by-start-date", produces = "application/json")
-    public List<EventDTO> readEventsByStartDate() {
+    public List<EventCustomDTO> readEventsByStartDate() {
         return eventService.getEventsByStartDate();
     }
 
