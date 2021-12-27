@@ -1,15 +1,23 @@
 package com.holovko.springmvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.holovko.springmvc.controller.EventController;
 import com.holovko.springmvc.model.Event;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -19,9 +27,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@TestPropertySource("/application-test.properties")
+
+@TestPropertySource("/application-test-h2.properties")
 @Sql(value = "/import-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = "/clean-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+//@Sql(value = "/clean-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class EventTests {
     @Autowired
     private MockMvc mockMvc;
@@ -101,7 +112,7 @@ class EventTests {
         event.setStartDate(startDateForTest);
 
         this.mockMvc
-                .perform(put("/events/1")
+                .perform(put("/events/2")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(event))
@@ -112,7 +123,7 @@ class EventTests {
                 .andExpect(jsonPath("$.amount").value("10"))
                 .andExpect(jsonPath("$.price").value("2000"))
                 .andExpect(jsonPath("$.startDate").value(startDateForTest.format(dateTimeFormatter)))
-                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.id").isNotEmpty())
                 .andReturn();
 
     }

@@ -7,6 +7,7 @@ import com.holovko.springmvc.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class EventController {
@@ -34,7 +35,7 @@ public class EventController {
     }
 
     @GetMapping(value = "/events/{id}", produces = "application/json")
-    public Event getEvent(@PathVariable(value = "id") Long id) {
+    public Optional<Event> getEvent(@PathVariable(value = "id") Long id) {
         return eventService.getEvent(id);
     }
 

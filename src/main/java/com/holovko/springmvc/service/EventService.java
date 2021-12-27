@@ -12,6 +12,8 @@ import org.webjars.NotFoundException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
 public class EventService {
@@ -38,11 +40,8 @@ public class EventService {
         return listDTO;
     }
 
-    public Event getEvent(Long eventId) {
-        if (eventRepository.findById(eventId).isEmpty()) {
-            throw new NotFoundException("Event not found!");
-        }
-        return eventRepository.findById(eventId).get();
+    public Optional<Event> getEvent(Long eventId) {
+        return eventRepository.findById(eventId);
     }
 
     public void deleteEvent(Long eventId) {
@@ -50,7 +49,7 @@ public class EventService {
     }
 
     public Event updateEvent(Long eventId, Event eventDetails) {
-        Event event = eventRepository.findById(eventId).get();
+        Event event = eventRepository.findById(eventId).orElseThrow();
         event.setName(eventDetails.getName());
         event.setAmount(eventDetails.getAmount());
         event.setPrice(eventDetails.getPrice());
