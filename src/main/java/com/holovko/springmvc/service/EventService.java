@@ -1,19 +1,17 @@
 package com.holovko.springmvc.service;
 
-import com.holovko.springmvc.dto.BuyerDTO;
-import com.holovko.springmvc.dto.EventDTO;
+import com.holovko.springmvc.dto.BuyerCustomDTO;
+import com.holovko.springmvc.dto.EventCustomDTO;
 import com.holovko.springmvc.dto.EventForBuyerDTO;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @Service
 public class EventService {
@@ -28,14 +26,14 @@ public class EventService {
         return (List<Event>) eventRepository.findAll();
     }
 
-    public List<EventDTO> getEventsByStartDate() {
+    public List<EventCustomDTO> getEventsByStartDate() {
         ArrayList<Event> list = (ArrayList<Event>) eventRepository.findAllByOrderByStartDateAsc();
-        ArrayList<EventDTO> listDTO = new ArrayList<>();
+        ArrayList<EventCustomDTO> listDTO = new ArrayList<>();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         int i = 0;
         for( Event event : list){
-            EventDTO eventDTO = new EventDTO(++i, event.getName(), event.getStartDate().format(dateTimeFormatter) );
-            listDTO.add(eventDTO);
+            EventCustomDTO eventCustomDTO = new EventCustomDTO(++i, event.getName(), event.getStartDate().format(dateTimeFormatter) );
+            listDTO.add(eventCustomDTO);
         }
         return listDTO;
     }
@@ -57,7 +55,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public BuyerDTO getEventsByBuyer(String buyerName) {
+    public BuyerCustomDTO getEventsByBuyer(String buyerName) {
         ArrayList<String> list = (ArrayList<String>) eventRepository.findEventsByBuyer(buyerName);
         ArrayList<EventForBuyerDTO> listEvents = new ArrayList<>();
         int i = 0;
@@ -65,7 +63,6 @@ public class EventService {
             EventForBuyerDTO eventForBuyerDTO = new EventForBuyerDTO(++i, eventName);
             listEvents.add(eventForBuyerDTO);
         }
-        BuyerDTO buyerDTO = new BuyerDTO(buyerName, listEvents);
-        return buyerDTO;
+        return new BuyerCustomDTO(buyerName, listEvents);
     }
 }
