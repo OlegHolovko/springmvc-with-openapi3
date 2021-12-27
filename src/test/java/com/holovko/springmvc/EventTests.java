@@ -65,6 +65,37 @@ class EventTests {
     }
 
     @Test
+    void getEventByBuyer() throws Exception {
+        this.mockMvc
+                .perform(get("/events/buyer/Peter")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.name").value("Peter"))
+                .andExpect(jsonPath("$.events[0].num").value("1"))
+                .andExpect(jsonPath("$.events[0].name").value("Opera"));
+    }
+
+    @Test
+    void getEventByStartDate() throws Exception {
+        this.mockMvc
+                .perform(get("/events/by-start-date")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.[0].num").value("1"))
+                .andExpect(jsonPath("$.[0].name").value("Concert"))
+                .andExpect(jsonPath("$.[1].num").value("2"))
+                .andExpect(jsonPath("$.[1].name").value("Football"))
+                .andExpect(jsonPath("$.[2].num").value("3"))
+                .andExpect(jsonPath("$.[2].name").value("Opera"));
+    }
+
+    @Test
     void getEventByNotExistingId() throws Exception {
         this.mockMvc
                 .perform(get("/events/999")
