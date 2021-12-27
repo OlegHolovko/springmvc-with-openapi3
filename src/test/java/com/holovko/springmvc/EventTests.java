@@ -2,7 +2,6 @@ package com.holovko.springmvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.holovko.springmvc.dto.EventDTO;
-import com.holovko.springmvc.model.Event;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -66,6 +65,18 @@ class EventTests {
     }
 
     @Test
+    void getEventByNotExistingId() throws Exception {
+        this.mockMvc
+                .perform(get("/events/999")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().string("null"));
+    }
+
+    @Test
     void createEvent() throws Exception {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateForTest = LocalDateTime.now();
@@ -120,4 +131,5 @@ class EventTests {
                 .andReturn();
 
     }
+
 }
