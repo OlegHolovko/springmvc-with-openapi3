@@ -2,6 +2,7 @@ package com.holovko.springmvc.service;
 
 import com.holovko.springmvc.dto.BuyerCustomDTO;
 import com.holovko.springmvc.dto.EventCustomDTO;
+import com.holovko.springmvc.dto.EventDTO;
 import com.holovko.springmvc.dto.EventForBuyerDTO;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.repository.EventRepository;
@@ -18,7 +19,12 @@ public class EventService {
     @Autowired
     EventRepository eventRepository;
 
-    public Event createEvent(Event event) {
+    public Event createEvent(EventDTO eventDetails) {
+        Event event = new Event();
+        event.setName(eventDetails.getName());
+        event.setAmount(eventDetails.getAmount());
+        event.setPrice(eventDetails.getPrice());
+        event.setStartDate(eventDetails.getStartDate());
         return eventRepository.save(event);
     }
 
@@ -46,7 +52,7 @@ public class EventService {
         eventRepository.deleteById(eventId);
     }
 
-    public Event updateEvent(Long eventId, Event eventDetails) {
+    public Event updateEvent(Long eventId, EventDTO eventDetails) {
         Event event = eventRepository.findById(eventId).orElseThrow();
         event.setName(eventDetails.getName());
         event.setAmount(eventDetails.getAmount());

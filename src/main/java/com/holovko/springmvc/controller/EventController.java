@@ -2,6 +2,7 @@ package com.holovko.springmvc.controller;
 
 import com.holovko.springmvc.dto.BuyerCustomDTO;
 import com.holovko.springmvc.dto.EventCustomDTO;
+import com.holovko.springmvc.dto.EventDTO;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class EventController {
     EventService eventService;
 
     @PostMapping(value = "/events", produces = "application/json")
-    public Event createEvent(@RequestBody Event event) {
+    public Event createEvent(@RequestBody EventDTO event) {
         return eventService.createEvent(event);
     }
 
@@ -25,12 +26,12 @@ public class EventController {
     }
 
     @GetMapping(value = "/events", produces = "application/json")
-    public List<Event> readEvents() {
+    public List<Event> getEvents() {
         return eventService.getEvents();
     }
 
     @GetMapping(value = "/events/by-start-date", produces = "application/json")
-    public List<EventCustomDTO> readEventsByStartDate() {
+    public List<EventCustomDTO> getEventsByStartDate() {
         return eventService.getEventsByStartDate();
     }
 
@@ -40,7 +41,7 @@ public class EventController {
     }
 
     @PutMapping(value="/events/{id}", produces = "application/json")
-    public Event readEvent(@PathVariable(value = "id") Long id, @RequestBody Event event) {
+    public Event updateEvent(@PathVariable(value = "id") Long id, @RequestBody EventDTO event) {
         return eventService.updateEvent(id, event);
     }
 

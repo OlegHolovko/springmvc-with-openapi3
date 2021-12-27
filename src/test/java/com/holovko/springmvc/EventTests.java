@@ -1,6 +1,7 @@
 package com.holovko.springmvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.holovko.springmvc.dto.EventDTO;
 import com.holovko.springmvc.model.Event;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ class EventTests {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateForTest = LocalDateTime.now();
 
-        Event event = new Event();
+        EventDTO event = new EventDTO();
         event.setName("Test Event");
         event.setPrice(2000);
         event.setAmount(10);
@@ -97,7 +98,7 @@ class EventTests {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateForTest = LocalDateTime.now();
 
-        Event event = new Event();
+        EventDTO event = new EventDTO();
         event.setName("Test Event");
         event.setPrice(2000);
         event.setAmount(10);
