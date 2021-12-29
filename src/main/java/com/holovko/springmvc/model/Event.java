@@ -2,7 +2,9 @@ package com.holovko.springmvc.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,7 +15,8 @@ import java.util.Set;
 @Table(name = "events")
 @Getter
 @Setter
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class Event extends BaseEntity{
 
     @Id
