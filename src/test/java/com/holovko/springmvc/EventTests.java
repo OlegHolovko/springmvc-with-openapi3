@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestPropertySource("/application-test-h2.properties")
 @Sql(value = "/import-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//@Sql(value = "/clean-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class EventTests {
     @Autowired
