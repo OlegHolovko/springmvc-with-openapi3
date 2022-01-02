@@ -1,6 +1,8 @@
 package com.holovko.springmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,10 +19,12 @@ public class BaseEntity {
 
     @Column(name = "created_at")
     @CreationTimestamp
+    @JsonIgnore
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @UpdateTimestamp
+    @JsonIgnore
     private LocalDateTime updatedAt;
 
 }
