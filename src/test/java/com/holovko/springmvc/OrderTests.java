@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
@@ -40,5 +41,32 @@ class OrderTests {
                 .andExpect(jsonPath("$.[1].buyerName", is("John")))
                 .andExpect(jsonPath("$.[1].amount", is(2)))
                 .andExpect(jsonPath("$.[1].totalPrice", is(4000)));
+    }
+
+    @Test
+    void getOrder() throws Exception {
+        this.mockMvc
+                .perform(get("/orders/1")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.buyerName").value("Peter"))
+                .andExpect(jsonPath("$.amount").value("1"))
+                .andExpect(jsonPath("$.totalPrice").value("2000"));
+    }
+
+    @Test
+    void getOrderByNotExistingId() throws Exception {
+        this.mockMvc
+                .perform(get("/orders/999")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().string("null"));
     }
 }
