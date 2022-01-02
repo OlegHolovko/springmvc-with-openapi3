@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -24,9 +25,7 @@ public class OrderService {
             throws EventNotFoundException, EventExpiredException, TiсketsSoldOutException {
         if(!orderRepository.existsById(eventId))
             throw new EventNotFoundException();
-        Event event = eventRepository.findEventById(eventId);
-        if(eventRepository.getNotExpiredEventById(eventId, LocalDateTime.now()) != eventId)
-            throw new EventExpiredException();
+        Event event = getEvent(eventId);
         if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - order.getAmount() < 0)
             throw new TiсketsSoldOutException();
         order.setEvent(event);
@@ -38,8 +37,8 @@ public class OrderService {
         return (List<Order>) orderRepository.findAll();
     }
 
-    public Order getOrder(Long orderId) {
-        return orderRepository.findById(orderId).get();
+    public Optional<Order> getOrder(Long orderId) {
+        return orderRepository.findById(orderId);
     }
 
     public void deleteOrder(Long orderId) {
@@ -48,19 +47,22 @@ public class OrderService {
 
     public Order updateOrder(Long orderId, Long eventId, Order orderDetails)
             throws EventNotFoundException, EventExpiredException, TiсketsSoldOutException {
-        Order order = orderRepository.findById(orderId).get();
+        Order order = orderRepository.findById(orderId).orElseThrow();
         order.setBuyerName(orderDetails.getBuyerName());
         order.setAmount(orderDetails.getAmount());
-        if(!orderRepository.existsById(eventId))
-            throw new EventNotFoundException();
-        Event event = eventRepository.findEventById(eventId);
-        if(eventRepository.getNotExpiredEventById(eventId, LocalDateTime.now()) != eventId)
-            throw new EventExpiredException();
+        Event event = getEvent(eventId);
         if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - order.getAmount() < 0)
             throw new TiсketsSoldOutException();
         order.setEvent(event);
         order.setTotalPrice(event.getPrice()*orderDetails.getAmount());
         return orderRepository.save(order);
+    }
+
+    private Event getEvent(Long eventId) throws EventNotFoundException, EventExpiredException {
+        Event event = eventRepository.findById(eventId).orElseThrow(EventNotFoundException::new);
+        if( LocalDateTime.now().isBefore(event.getStartDate()))
+            throw new EventExpiredException();
+        return event;
     }
 
 }
