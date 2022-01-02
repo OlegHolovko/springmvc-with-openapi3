@@ -1,7 +1,6 @@
 package com.holovko.springmvc.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "events")
@@ -36,10 +35,5 @@ public class Event extends BaseEntity{
     @Column(name="start_date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
-
-    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<Order> orders;
 
 }
