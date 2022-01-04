@@ -1,5 +1,7 @@
 package com.holovko.springmvc.service;
 
+import com.holovko.springmvc.dto.order.RequestCreateOrderDTO;
+import com.holovko.springmvc.dto.order.RequestUpdateOrderDTO;
 import com.holovko.springmvc.exception.EventExpiredException;
 import com.holovko.springmvc.exception.EventNotFoundException;
 import com.holovko.springmvc.exception.TiсketsSoldOutException;
@@ -21,15 +23,16 @@ public class OrderService {
     @Autowired
     EventRepository eventRepository;
 
-    public Order createOrder(Long eventId, Order order)
+    public Order createOrder(Long eventId, RequestCreateOrderDTO orderDTO)
             throws EventNotFoundException, EventExpiredException, TiсketsSoldOutException {
-        if(!orderRepository.existsById(eventId))
+        Order order = new Order();
+        if(!eventRepository.existsById(eventId))
             throw new EventNotFoundException();
         Event event = getEvent(eventId);
-        if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - order.getAmount() < 0)
+        if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - orderDTO.getAmount() < 0)
             throw new TiсketsSoldOutException();
         order.setEvent(event);
-        order.setTotalPrice(event.getPrice()*order.getAmount());
+        order.setTotalPrice(event.getPrice()*orderDTO.getAmount());
         return orderRepository.save(order);
     }
 
@@ -45,16 +48,16 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    public Order updateOrder(Long orderId, Long eventId, Order orderDetails)
+    public Order updateOrder(Long orderId, Long eventId, RequestUpdateOrderDTO orderDTO)
             throws EventNotFoundException, EventExpiredException, TiсketsSoldOutException {
         Order order = orderRepository.findById(orderId).orElseThrow();
-        order.setBuyerName(orderDetails.getBuyerName());
-        order.setAmount(orderDetails.getAmount());
+        order.setBuyerName(orderDTO.getBuyerName());
+        order.setAmount(orderDTO.getAmount());
         Event event = getEvent(eventId);
         if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - order.getAmount() < 0)
             throw new TiсketsSoldOutException();
         order.setEvent(event);
-        order.setTotalPrice(event.getPrice()*orderDetails.getAmount());
+        order.setTotalPrice(event.getPrice()*orderDTO.getAmount());
         return orderRepository.save(order);
     }
 

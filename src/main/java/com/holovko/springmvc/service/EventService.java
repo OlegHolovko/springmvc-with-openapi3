@@ -1,9 +1,10 @@
 package com.holovko.springmvc.service;
 
-import com.holovko.springmvc.dto.BuyerCustomDTO;
-import com.holovko.springmvc.dto.EventCustomDTO;
-import com.holovko.springmvc.dto.EventDTO;
-import com.holovko.springmvc.dto.EventForBuyerDTO;
+import com.holovko.springmvc.dto.event.RequestCreateEventDTO;
+import com.holovko.springmvc.dto.event.EventsByBuyerDTO;
+import com.holovko.springmvc.dto.event.EventCustomDTO;
+import com.holovko.springmvc.dto.event.RequestUpdateEventDTO;
+import com.holovko.springmvc.dto.event.EventForBuyerDTO;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class EventService {
     @Autowired
     EventRepository eventRepository;
 
-    public Event createEvent(EventDTO eventDetails) {
+    public Event createEvent(RequestCreateEventDTO eventDetails) {
         Event event = new Event();
         event.setName(eventDetails.getName());
         event.setAmount(eventDetails.getAmount());
@@ -52,7 +53,7 @@ public class EventService {
         eventRepository.deleteById(eventId);
     }
 
-    public Event updateEvent(Long eventId, EventDTO eventDetails) {
+    public Event updateEvent(Long eventId, RequestUpdateEventDTO eventDetails) {
         Event event = eventRepository.findById(eventId).orElseThrow();
         event.setName(eventDetails.getName());
         event.setAmount(eventDetails.getAmount());
@@ -61,7 +62,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public BuyerCustomDTO getEventsByBuyer(String buyerName) {
+    public EventsByBuyerDTO getEventsByBuyer(String buyerName) {
         ArrayList<String> list = (ArrayList<String>) eventRepository.findEventsByBuyer(buyerName);
         ArrayList<EventForBuyerDTO> listEvents = new ArrayList<>();
         int i = 0;
@@ -69,6 +70,6 @@ public class EventService {
             EventForBuyerDTO eventForBuyerDTO = new EventForBuyerDTO(++i, eventName);
             listEvents.add(eventForBuyerDTO);
         }
-        return new BuyerCustomDTO(buyerName, listEvents);
+        return new EventsByBuyerDTO(buyerName, listEvents);
     }
 }

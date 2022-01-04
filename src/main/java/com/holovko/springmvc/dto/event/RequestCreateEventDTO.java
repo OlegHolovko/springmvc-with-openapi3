@@ -1,4 +1,4 @@
-package com.holovko.springmvc.dto;
+package com.holovko.springmvc.dto.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDTO {
-    private Long id;
+public class RequestCreateEventDTO {
     private String name;
     private Integer amount;
     private Integer price;
