@@ -1,7 +1,7 @@
 package com.holovko.springmvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.holovko.springmvc.dto.EventDTO;
+import com.holovko.springmvc.dto.event.RequestUpdateEventDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -101,9 +101,7 @@ class EventTests {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().string("null"));
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -111,7 +109,7 @@ class EventTests {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateForTest = LocalDateTime.now();
 
-        EventDTO event = new EventDTO();
+        RequestUpdateEventDTO event = new RequestUpdateEventDTO();
         event.setName("Test Event");
         event.setPrice(2000);
         event.setAmount(10);
@@ -139,7 +137,7 @@ class EventTests {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateForTest = LocalDateTime.now();
 
-        EventDTO event = new EventDTO();
+        RequestUpdateEventDTO event = new RequestUpdateEventDTO();
         event.setName("Test Event");
         event.setPrice(2000);
         event.setAmount(10);

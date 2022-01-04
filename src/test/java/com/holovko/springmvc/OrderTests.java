@@ -65,8 +65,6 @@ class OrderTests {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().string("null"));
+                .andExpect(status().is4xxClientError());
     }
 }
