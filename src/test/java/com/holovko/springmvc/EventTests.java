@@ -34,33 +34,34 @@ class EventTests {
     @Test
     void getEventsList() throws Exception {
         this.mockMvc.perform(get("/events"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType("application/json"))
-            .andExpect(jsonPath("$[*]", hasSize(3)))
-            .andExpect(jsonPath("$.[0].name", is("Football")))
-            .andExpect(jsonPath("$.[0].amount", is(100)))
-            .andExpect(jsonPath("$.[0].price", is(1257)))
-            .andExpect(jsonPath("$.[0].startDate", is("2022-01-13 00:00:00")))
-            .andExpect(jsonPath("$.[2].name", is("Opera")))
-            .andExpect(jsonPath("$.[2].amount", is(70)))
-            .andExpect(jsonPath("$.[2].price", is(2000)))
-            .andExpect(jsonPath("$.[2].startDate", is("2022-05-01 00:00:00")));
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$[*]", hasSize(3)))
+                .andExpect(jsonPath("$.[0].name", is("Football")))
+                .andExpect(jsonPath("$.[0].amount", is(100)))
+                .andExpect(jsonPath("$.[0].price", is(1257)))
+                .andExpect(jsonPath("$.[0].startDate", is("2022-01-13 00:00:00")))
+                .andExpect(jsonPath("$.[2].name", is("Opera")))
+                .andExpect(jsonPath("$.[2].amount", is(70)))
+                .andExpect(jsonPath("$.[2].price", is(2000)))
+                .andExpect(jsonPath("$.[2].startDate", is("2022-05-01 00:00:00")));
     }
 
     @Test
     void getEvent() throws Exception {
+        long eventId = 3L;
         this.mockMvc
-            .perform(get("/events/3")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-            )
-            .andExpect(status().isOk())
-            .andExpect(content().contentType("application/json"))
-            .andExpect(jsonPath("$.id").value("3"))
-            .andExpect(jsonPath("$.name").value("Opera"))
-            .andExpect(jsonPath("$.amount").value("70"))
-            .andExpect(jsonPath("$.price").value("2000"))
-            .andExpect(jsonPath("$.startDate").value("2022-05-01 00:00:00"));
+                .perform(get("/events/"+eventId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.id").value("3"))
+                .andExpect(jsonPath("$.name").value("Opera"))
+                .andExpect(jsonPath("$.amount").value("70"))
+                .andExpect(jsonPath("$.price").value("2000"))
+                .andExpect(jsonPath("$.startDate").value("2022-05-01 00:00:00"));
     }
 
     @Test
@@ -96,8 +97,9 @@ class EventTests {
 
     @Test
     void getEventByNotExistingId() throws Exception {
+        long eventId = 999L;
         this.mockMvc
-                .perform(get("/events/999")
+                .perform(get("/events/"+eventId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
