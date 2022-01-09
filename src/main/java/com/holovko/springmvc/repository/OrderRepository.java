@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends CrudRepository<Order, Long> {
 
-    @Query(value = "SELECT SUM(amount) FROM orders WHERE event_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT COALESCE(SUM(amount),0) FROM orders WHERE event_id = ?1", nativeQuery = true)
     Integer getAmountSumByEventId(long eventId);
 
 }

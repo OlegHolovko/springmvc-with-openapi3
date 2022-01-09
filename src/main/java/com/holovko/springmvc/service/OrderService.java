@@ -26,8 +26,8 @@ public class OrderService {
     public Order createOrder(Long eventId, RequestCreateOrderDTO orderDTO)
             throws EventNotFoundException, EventExpiredException, TiсketsSoldOutException {
         Order order = new Order();
-        if(!eventRepository.existsById(eventId))
-            throw new EventNotFoundException();
+        order.setBuyerName(orderDTO.getBuyerName());
+        order.setAmount(orderDTO.getAmount());
         Event event = getEvent(eventId);
         if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - orderDTO.getAmount() < 0)
             throw new TiсketsSoldOutException();
@@ -63,7 +63,7 @@ public class OrderService {
 
     private Event getEvent(Long eventId) throws EventNotFoundException, EventExpiredException {
         Event event = eventRepository.findById(eventId).orElseThrow(EventNotFoundException::new);
-        if( LocalDateTime.now().isBefore(event.getStartDate()))
+        if( LocalDateTime.now().isAfter(event.getStartDate()))
             throw new EventExpiredException();
         return event;
     }
