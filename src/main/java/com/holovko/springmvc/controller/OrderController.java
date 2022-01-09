@@ -5,7 +5,7 @@ import com.holovko.springmvc.dto.order.RequestUpdateOrderDTO;
 import com.holovko.springmvc.exception.EventExpiredException;
 import com.holovko.springmvc.exception.EventNotFoundException;
 import com.holovko.springmvc.exception.OrderNotFoundException;
-import com.holovko.springmvc.exception.TiсketsSoldOutException;
+import com.holovko.springmvc.exception.TicketsSoldOutException;
 import com.holovko.springmvc.model.Order;
 import com.holovko.springmvc.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class OrderController {
     @PostMapping(value="/orders/events/{eventId}", produces = "application/json")
     public Order createOrder(@PathVariable(value = "eventId") Long eventId,
                              @Valid @RequestBody RequestCreateOrderDTO order)
-            throws EventNotFoundException, EventExpiredException, TiсketsSoldOutException {
+            throws EventNotFoundException, EventExpiredException, TicketsSoldOutException {
         return orderService.createOrder(eventId, order);
     }
 
@@ -39,7 +39,7 @@ public class OrderController {
     @PutMapping(value="/orders/{id}/events/{eventId}", produces = "application/json")
     public Order readOrders(@PathVariable(value = "id") Long id, @PathVariable(value = "eventId") Long eventId,
                             @Valid  @RequestBody RequestUpdateOrderDTO order)
-            throws EventNotFoundException, TiсketsSoldOutException, EventExpiredException {
+            throws EventNotFoundException, TicketsSoldOutException, EventExpiredException {
         return orderService.updateOrder(id, eventId, order);
     }
 
