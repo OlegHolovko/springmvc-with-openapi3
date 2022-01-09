@@ -1,10 +1,6 @@
 package com.holovko.springmvc.service;
 
-import com.holovko.springmvc.dto.event.RequestCreateEventDTO;
-import com.holovko.springmvc.dto.event.EventsByBuyerDTO;
-import com.holovko.springmvc.dto.event.EventCustomDTO;
-import com.holovko.springmvc.dto.event.RequestUpdateEventDTO;
-import com.holovko.springmvc.dto.event.EventForBuyerDTO;
+import com.holovko.springmvc.dto.event.*;
 import com.holovko.springmvc.model.Event;
 import com.holovko.springmvc.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
