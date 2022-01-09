@@ -2,6 +2,7 @@ package com.holovko.springmvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.holovko.springmvc.dto.order.RequestCreateOrderDTO;
+import com.holovko.springmvc.dto.order.RequestUpdateOrderDTO;
 import com.holovko.springmvc.exception.EventExpiredException;
 import com.holovko.springmvc.exception.EventNotFoundException;
 import com.holovko.springmvc.exception.TicketsSoldOutException;
@@ -19,8 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -53,8 +53,9 @@ class OrderTests {
 
     @Test
     void getOrder() throws Exception {
+        long orderId = 1L;
         this.mockMvc
-                .perform(get("/orders/1")
+                .perform(get("/orders/"+orderId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -68,8 +69,9 @@ class OrderTests {
 
     @Test
     void getOrderByNotExistingId() throws Exception {
+        long orderId = 999L;
         this.mockMvc
-                .perform(get("/orders/999")
+                .perform(get("/orders/"+orderId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -78,7 +80,7 @@ class OrderTests {
 
     @Test
     void createOrder() throws Exception {
-        Long eventId = 1L;
+        long eventId = 1L;
         RequestCreateOrderDTO orderDTO = new RequestCreateOrderDTO();
         orderDTO.setBuyerName("Test Buyer");
         orderDTO.setAmount(1);
@@ -138,15 +140,100 @@ class OrderTests {
     }
 
     @Test
-    void createOrderWithTiсketsSoldOutException() throws Exception {
+    void createOrderWithTicketsSoldOutException() throws Exception {
         long eventId = 1L;
         RequestCreateOrderDTO orderDTO = new RequestCreateOrderDTO();
         orderDTO.setBuyerName("Test Buyer");
-        orderDTO.setAmount(150);
+        orderDTO.setAmount(250);
 
 
         MvcResult result = this.mockMvc
                 .perform(post("/orders/events/"+eventId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDTO))
+                )
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+        Assertions.assertTrue(result.getResolvedException() instanceof TicketsSoldOutException);
+
+    }
+
+    @Test
+    void updateOrder() throws Exception {
+        long orderId = 1L;
+        long eventId = 3L;
+        RequestUpdateOrderDTO orderDTO = new RequestUpdateOrderDTO();
+        orderDTO.setBuyerName("Test Buyer");
+        orderDTO.setAmount(1);
+
+        this.mockMvc
+                .perform(put("/orders/"+orderId+"/events/"+eventId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDTO))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.buyerName").value("Test Buyer"))
+                .andExpect(jsonPath("$.amount").value("1"))
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.event.name").value("Opera"))
+                .andExpect(jsonPath("$.event.amount").value("70"))
+                .andReturn();
+    }
+
+    @Test
+    void updateOrderWithEventExpiredException() throws Exception {
+        long orderId = 2L;
+        long eventId = 2L;
+        RequestUpdateOrderDTO orderDTO = new RequestUpdateOrderDTO();
+        orderDTO.setBuyerName("Test Buyer");
+        orderDTO.setAmount(1);
+
+        MvcResult result = this.mockMvc
+                .perform(put("/orders/"+orderId+"/events/"+eventId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDTO))
+                )
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+        Assertions.assertTrue(result.getResolvedException() instanceof EventExpiredException);
+    }
+
+    @Test
+    void updateOrderWithEventNotFoundException() throws Exception {
+        long orderId = 1L;
+        long eventId = 999L;
+        RequestUpdateOrderDTO orderDTO = new RequestUpdateOrderDTO();
+        orderDTO.setBuyerName("Test Buyer");
+        orderDTO.setAmount(1);
+
+
+        MvcResult result = this.mockMvc
+                .perform(put("/orders/"+orderId+"/events/"+eventId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDTO))
+                )
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+        Assertions.assertTrue(result.getResolvedException() instanceof EventNotFoundException);
+
+    }
+
+    @Test
+    void updateOrderWithTicketsSoldOutException() throws Exception {
+        long orderId = 1L;
+        long eventId = 3L;
+        RequestCreateOrderDTO orderDTO = new RequestCreateOrderDTO();
+        orderDTO.setBuyerName("Test Buyer");
+        orderDTO.setAmount(250);
+
+
+        MvcResult result = this.mockMvc
+                .perform(put("/orders/"+orderId+"/events/"+eventId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderDTO))
