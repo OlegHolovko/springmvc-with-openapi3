@@ -2,22 +2,20 @@ package com.holovko.springmvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.holovko.springmvc.dto.order.RequestCreateOrderDTO;
-import com.holovko.springmvc.repository.EventRepository;
-import com.holovko.springmvc.repository.OrderRepository;
-import com.holovko.springmvc.service.OrderService;
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
+import com.holovko.springmvc.exception.EventExpiredException;
+import com.holovko.springmvc.exception.EventNotFoundException;
+import com.holovko.springmvc.exception.TicketsSoldOutException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -38,17 +36,6 @@ class OrderTests {
 
     @Autowired
     private ObjectMapper objectMapper;
-/*
-    @Autowired
-    OrderService orderService;
-
-    @MockBean
-    EventRepository eventRepository;
-
-    @MockBean
-    OrderRepository orderRepository;
-
- */
 
     @Test
     void getOrdersList() throws Exception {
@@ -91,7 +78,7 @@ class OrderTests {
 
     @Test
     void createOrder() throws Exception {
-        long eventId = 1L;
+        Long eventId = 1L;
         RequestCreateOrderDTO orderDTO = new RequestCreateOrderDTO();
         orderDTO.setBuyerName("Test Buyer");
         orderDTO.setAmount(1);
@@ -112,5 +99,62 @@ class OrderTests {
                 .andReturn();
     }
 
+    @Test
+    void createOrderWithEventExpiredException() throws Exception {
+        long eventId = 2L;
+        RequestCreateOrderDTO orderDTO = new RequestCreateOrderDTO();
+        orderDTO.setBuyerName("Test Buyer");
+        orderDTO.setAmount(1);
+
+        MvcResult result = this.mockMvc
+                .perform(post("/orders/events/"+eventId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDTO))
+                )
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+        Assertions.assertTrue(result.getResolvedException() instanceof EventExpiredException);
+    }
+
+    @Test
+    void createOrderWithEventNotFoundException() throws Exception {
+        long eventId = 999L;
+        RequestCreateOrderDTO orderDTO = new RequestCreateOrderDTO();
+        orderDTO.setBuyerName("Test Buyer");
+        orderDTO.setAmount(1);
+
+
+        MvcResult result = this.mockMvc
+                .perform(post("/orders/events/"+eventId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDTO))
+                )
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+        Assertions.assertTrue(result.getResolvedException() instanceof EventNotFoundException);
+
+    }
+
+    @Test
+    void createOrderWithTiсketsSoldOutException() throws Exception {
+        long eventId = 1L;
+        RequestCreateOrderDTO orderDTO = new RequestCreateOrderDTO();
+        orderDTO.setBuyerName("Test Buyer");
+        orderDTO.setAmount(150);
+
+
+        MvcResult result = this.mockMvc
+                .perform(post("/orders/events/"+eventId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderDTO))
+                )
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+        Assertions.assertTrue(result.getResolvedException() instanceof TicketsSoldOutException);
+
+    }
 
 }
