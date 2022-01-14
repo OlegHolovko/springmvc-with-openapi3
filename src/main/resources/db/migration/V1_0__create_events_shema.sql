@@ -4,7 +4,7 @@ CREATE TABLE events
     name             character varying(255),
     amount           integer,
     price            integer,
-    start_date       timestamp without time zone,
-    created_at       timestamp without time zone,
-    updated_at       timestamp without time zone
+    start_date       timestamp,
+    created_at       timestamp,
+    updated_at       timestamp
 )

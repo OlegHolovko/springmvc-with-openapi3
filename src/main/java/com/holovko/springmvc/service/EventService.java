@@ -6,6 +6,7 @@ import com.holovko.springmvc.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,8 @@ public class EventService {
         event.setName(eventDetails.getName());
         event.setAmount(eventDetails.getAmount());
         event.setPrice(eventDetails.getPrice());
-        event.setStartDate(eventDetails.getStartDate());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        event.setStartDate(LocalDateTime.parse(eventDetails.getStartDate(), dateTimeFormatter));
         return eventRepository.save(event);
     }
 
@@ -54,7 +56,8 @@ public class EventService {
         event.setName(eventDetails.getName());
         event.setAmount(eventDetails.getAmount());
         event.setPrice(eventDetails.getPrice());
-        event.setStartDate(eventDetails.getStartDate());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        event.setStartDate(LocalDateTime.parse(eventDetails.getStartDate(), dateTimeFormatter));
         return eventRepository.save(event);
     }
 

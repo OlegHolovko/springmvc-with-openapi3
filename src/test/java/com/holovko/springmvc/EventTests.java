@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
@@ -40,11 +41,11 @@ class EventTests {
                 .andExpect(jsonPath("$.[0].name", is("Football")))
                 .andExpect(jsonPath("$.[0].amount", is(100)))
                 .andExpect(jsonPath("$.[0].price", is(1257)))
-                .andExpect(jsonPath("$.[0].startDate", is("2022-01-13 00:00:00")))
+                .andExpect(jsonPath("$.[0].startDate", is("2023-01-13 00:00:00")))
                 .andExpect(jsonPath("$.[2].name", is("Opera")))
                 .andExpect(jsonPath("$.[2].amount", is(70)))
                 .andExpect(jsonPath("$.[2].price", is(2000)))
-                .andExpect(jsonPath("$.[2].startDate", is("2022-05-01 00:00:00")));
+                .andExpect(jsonPath("$.[2].startDate", is("2023-05-01 00:00:00")));
     }
 
     @Test
@@ -61,7 +62,7 @@ class EventTests {
                 .andExpect(jsonPath("$.name").value("Opera"))
                 .andExpect(jsonPath("$.amount").value("70"))
                 .andExpect(jsonPath("$.price").value("2000"))
-                .andExpect(jsonPath("$.startDate").value("2022-05-01 00:00:00"));
+                .andExpect(jsonPath("$.startDate").value("2023-05-01 00:00:00"));
     }
 
     @Test
@@ -109,7 +110,7 @@ class EventTests {
     @Test
     void createEvent() throws Exception {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime startDateForTest = LocalDateTime.now();
+        String startDateForTest = LocalDateTime.now().format(dateTimeFormatter);
 
         RequestUpdateEventDTO event = new RequestUpdateEventDTO();
         event.setName("Test Event");
@@ -128,7 +129,7 @@ class EventTests {
                 .andExpect(jsonPath("$.name").value("Test Event"))
                 .andExpect(jsonPath("$.amount").value("10"))
                 .andExpect(jsonPath("$.price").value("2000"))
-                .andExpect(jsonPath("$.startDate").value(startDateForTest.format(dateTimeFormatter)))
+                .andExpect(jsonPath("$.startDate").value(startDateForTest))
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andReturn();
 
@@ -137,7 +138,7 @@ class EventTests {
     @Test
     void updateEvent() throws Exception {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime startDateForTest = LocalDateTime.now();
+        String startDateForTest = LocalDateTime.now().format(dateTimeFormatter);
 
         RequestUpdateEventDTO event = new RequestUpdateEventDTO();
         event.setName("Test Event");
@@ -156,7 +157,7 @@ class EventTests {
                 .andExpect(jsonPath("$.name").value("Test Event"))
                 .andExpect(jsonPath("$.amount").value("10"))
                 .andExpect(jsonPath("$.price").value("2000"))
-                .andExpect(jsonPath("$.startDate").value(startDateForTest.format(dateTimeFormatter)))
+                .andExpect(jsonPath("$.startDate").value(startDateForTest))
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andReturn();
 

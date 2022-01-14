@@ -17,6 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -82,8 +83,9 @@ class OrderTests {
     void createOrder() throws Exception {
         long eventId = 1L;
         RequestCreateOrderDTO orderDTO = new RequestCreateOrderDTO();
-        orderDTO.setBuyerName("Test Buyer");
+        orderDTO.setBuyerName("Buyer");
         orderDTO.setAmount(1);
+        orderDTO.setTotalPrice(100);
 
         this.mockMvc
                 .perform(post("/orders/events/"+eventId)
@@ -93,7 +95,7 @@ class OrderTests {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.buyerName").value("Test Buyer"))
+                .andExpect(jsonPath("$.buyerName").value("Buyer"))
                 .andExpect(jsonPath("$.amount").value("1"))
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(jsonPath("$.event.name").value("Football"))

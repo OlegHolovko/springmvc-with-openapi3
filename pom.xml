@@ -85,6 +85,7 @@
             <artifactId>flyway-core</artifactId>
             <version>8.4.1</version>
         </dependency>
+
     </dependencies>
 
     <build>

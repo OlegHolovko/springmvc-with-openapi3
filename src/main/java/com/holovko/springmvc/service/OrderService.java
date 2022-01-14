@@ -29,10 +29,8 @@ public class OrderService {
         order.setBuyerName(orderDTO.getBuyerName());
         order.setAmount(orderDTO.getAmount());
         Event event = getEvent(eventId);
-        if(orderDTO.getAmount() > 10)
+        if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - orderDTO.getAmount() < 0)
             throw new TicketsSoldOutException();
-        //if(event.getAmount() - orderRepository.getAmountSumByEventId(eventId) - orderDTO.getAmount() < 0)
-          //  throw new TiсketsSoldOutException();
         order.setEvent(event);
         order.setTotalPrice(event.getPrice()*orderDTO.getAmount());
         return orderRepository.save(order);

@@ -5,7 +5,7 @@ CREATE TABLE orders
     amount      integer,
     total_price integer,
     event_id    bigint,
-    created_at  timestamp without time zone,
-    updated_at  timestamp without time zone,
+    created_at  timestamp,
+    updated_at  timestamp,
     FOREIGN KEY (event_id) REFERENCES events (id)
 )
