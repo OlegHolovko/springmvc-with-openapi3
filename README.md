@@ -1,4 +1,4 @@
-**REST API based on Spring MVC**
+REST API based on Spring MVC
 
 - Spring MVC
 - Spring Data JPA
