@@ -17,12 +17,13 @@ public class EventService {
     @Autowired
     EventRepository eventRepository;
 
+    final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public Event createEvent(RequestCreateEventDTO eventDetails) {
         Event event = new Event();
         event.setName(eventDetails.getName());
         event.setAmount(eventDetails.getAmount());
         event.setPrice(eventDetails.getPrice());
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         event.setStartDate(LocalDateTime.parse(eventDetails.getStartDate(), dateTimeFormatter));
         return eventRepository.save(event);
     }
@@ -32,12 +33,12 @@ public class EventService {
     }
 
     public List<EventCustomDTO> getEventsByStartDate() {
-        ArrayList<Event> list = (ArrayList<Event>) eventRepository.findAllByOrderByStartDateAsc();
-        ArrayList<EventCustomDTO> listDTO = new ArrayList<>();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        List<Event> list = eventRepository.findAllByOrderByStartDateAsc();
+        List<EventCustomDTO> listDTO = new ArrayList<>();
+        DateTimeFormatter dateTimeFormatterShort = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         int i = 0;
         for( Event event : list){
-            EventCustomDTO eventCustomDTO = new EventCustomDTO(++i, event.getName(), event.getStartDate().format(dateTimeFormatter) );
+            EventCustomDTO eventCustomDTO = new EventCustomDTO(++i, event.getName(), event.getStartDate().format(dateTimeFormatterShort) );
             listDTO.add(eventCustomDTO);
         }
         return listDTO;
@@ -56,14 +57,13 @@ public class EventService {
         event.setName(eventDetails.getName());
         event.setAmount(eventDetails.getAmount());
         event.setPrice(eventDetails.getPrice());
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         event.setStartDate(LocalDateTime.parse(eventDetails.getStartDate(), dateTimeFormatter));
         return eventRepository.save(event);
     }
 
     public EventsByBuyerDTO getEventsByBuyer(String buyerName) {
-        ArrayList<String> list = (ArrayList<String>) eventRepository.findEventsByBuyer(buyerName);
-        ArrayList<EventForBuyerDTO> listEvents = new ArrayList<>();
+        List<String> list = eventRepository.findEventsByBuyer(buyerName);
+        List<EventForBuyerDTO> listEvents = new ArrayList<>();
         int i = 0;
         for( String eventName : list){
             EventForBuyerDTO eventForBuyerDTO = new EventForBuyerDTO(++i, eventName);
